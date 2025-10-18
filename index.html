@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Nómina - TCC INGENIERIA DE SOFTWARE </title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .employee-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .employee-item {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .employee-info h4 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .employee-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .employee-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .badge-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .results {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .employee-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .employee-actions {
+                margin-top: 0.5rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistema de Nómina</h1>
+            <p class="subtitle"> TCC INGENIERIA DE SOFTWARE - Principios SOLID, Código Limpio y Buenas Prácticas</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="form">Agregar Empleado</div>
+            <div class="tab" data-tab="list">Lista de Empleados</div>
+            <div class="tab" data-tab="calculate">Calcular Nómina</div>
+        </div>
+
+        <!-- Formulario para agregar empleados -->
+        <div class="tab-content active" id="form">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Registrar Nuevo Empleado</h2>
+                </div>
+                <form id="employeeForm">
+                    <div class="form-group">
+                        <label for="employeeType">Tipo de Empleado</label>
+                        <select id="employeeType" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="asalariado">Empleado Asalariado</option>
+                            <option value="horas">Empleado por Horas</option>
+                            <option value="comision">Empleado por Comisión</option>
+                            <option value="temporal">Empleado Temporal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employeeId">ID del Empleado</label>
+                        <input type="text" id="employeeId" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employeeName">Nombre del Empleado</label>
+                        <input type="text" id="employeeName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yearsInCompany">Años en la Empresa</label>
+                        <input type="number" id="yearsInCompany" min="0" required>
+                    </div>
+
+                    <!-- Campos específicos por tipo de empleado -->
+                    <div id="specificFields">
+                        <!-- Los campos específicos se cargarán dinámicamente según el tipo de empleado -->
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Agregar Empleado</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de empleados -->
+        <div class="tab-content" id="list">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Empleados Registrados</h2>
+                    <span id="employeeCount" class="badge badge-primary">0 empleados</span>
+                </div>
+                <div class="employee-list" id="employeeList">
+                    <!-- Los empleados se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Cálculo de nómina -->
+        <div class="tab-content" id="calculate">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Calcular Nómina</h2>
+                </div>
+                <div class="form-group">
+                    <label for="selectEmployee">Seleccionar Empleado</label>
+                    <select id="selectEmployee">
+                        <option value="">Seleccione un empleado</option>
+                    </select>
+                </div>
+                <button id="calculatePayroll" class="btn btn-success">Calcular Nómina</button>
+                
+                <div class="results" id="payrollResults" style="display: none;">
+                    <h3>Resultados de Nómina</h3>
+                    <div id="resultsContent">
+                        <!-- Los resultados se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Sistema de Nómina - TCC INGENIERIA DE SOFTWARE | Código Limpio, Principios SOLID y Buenas Prácticas</p>
+        </footer>
+    </div>
+
+    <script>
+        // Clases que implementan los principios SOLID
+
+        // Interface para empleados (Principio de Segregación de Interfaces)
+        class IEmpleado {
+            calcularSalarioBruto() {
+                throw new Error("Método calcularSalarioBruto debe ser implementado");
+            }
+            
+            calcularSalarioNeto() {
+                throw new Error("Método calcularSalarioNeto debe ser implementado");
+            }
+            
+            calcularDeducciones() {
+                throw new Error("Método calcularDeducciones debe ser implementado");
+            }
+            
+            calcularBeneficios() {
+                throw new Error("Método calcularBeneficios debe ser implementado");
+            }
+            
+            getTipoEmpleado() {
+                throw new Error("Método getTipoEmpleado debe ser implementado");
+            }
+        }
+
+        // Clase base abstracta para empleados (Principio de Sustitución de Liskov)
+        class Empleado extends IEmpleado {
+            constructor(id, nombre, salarioBase, añosEnEmpresa, aceptaFondoAhorro = false) {
+                super();
+                this.id = id;
+                this.nombre = nombre;
+                this.salarioBase = salarioBase;
+                this.añosEnEmpresa = añosEnEmpresa;
+                this.aceptaFondoAhorro = aceptaFondoAhorro;
+                
+                this.validarDatosBasicos();
+            }
+            
+            validarDatosBasicos() {
+                if (this.salarioBase < 0) {
+                    throw new Error("El salario base no puede ser negativo");
+                }
+                if (this.añosEnEmpresa < 0) {
+                    throw new Error("Los años en empresa no pueden ser negativos");
+                }
+            }
+            
+            calcularDeducciones() {
+                const seguroSocial = this.salarioBase * 0.04; // 4% seguro social y pensión
+                return seguroSocial;
+            }
+            
+            calcularSalarioNeto() {
+                const salarioBruto = this.calcularSalarioBruto();
+                const deducciones = this.calcularDeducciones();
+                const salarioNeto = salarioBruto - deducciones;
+                
+                if (salarioNeto < 0) {
+                    throw new Error("El salario neto no puede ser negativo");
+                }
+                
+                return salarioNeto;
+            }
+            
+            // Métodos abstractos que deben implementar las subclases
+            calcularSalarioBruto() {
+                throw new Error("Método abstracto: debe ser implementado en la subclase");
+            }
+            
+            calcularBeneficios() {
+                throw new Error("Método abstracto: debe ser implementado en la subclase");
+            }
+            
+            getTipoEmpleado() {
+                throw new Error("Método abstracto: debe ser implementado en la subclase");
+            }
+        }
+
+        // Implementación de tipos específicos de empleados (Principio de Responsabilidad Única)
+
+        class EmpleadoAsalariado extends Empleado {
+            constructor(id, nombre, salarioBase, añosEnEmpresa) {
+                super(id, nombre, salarioBase, añosEnEmpresa);
+            }
+            
+            calcularSalarioBruto() {
+                return this.salarioBase + this.calcularBonoAntiguedad();
+            }
+            
+            calcularBeneficios() {
+                return this.calcularBonoAntiguedad() + 1000000; // Bono alimentación
+            }
+            
+            calcularBonoAntiguedad() {
+                if (this.añosEnEmpresa > 5) {
+                    return this.salarioBase * 0.10; // 10% bono mensual
+                }
+                return 0;
+            }
+            
+            getTipoEmpleado() {
+                return "EMPLEADO_ASALARIADO";
+            }
+        }
+
+        class EmpleadoPorHoras extends Empleado {
+            constructor(id, nombre, tarifaPorHora, horasTrabajadas, añosEnEmpresa, aceptaFondoAhorro) {
+                super(id, nombre, 0, añosEnEmpresa, aceptaFondoAhorro);
+                this.tarifaPorHora = tarifaPorHora;
+                this.horasTrabajadas = horasTrabajadas;
+                
+                this.validarHorasTrabajadas();
+            }
+            
+            validarHorasTrabajadas() {
+                if (this.horasTrabajadas < 0) {
+                    throw new Error("Las horas trabajadas no pueden ser negativas");
+                }
+            }
+            
+            calcularSalarioBruto() {
+                let salario = 0;
+                
+                if (this.horasTrabajadas <= 40) {
+                    salario = this.horasTrabajadas * this.tarifaPorHora;
+                } else {
+                    const horasNormales = 40;
+                    const horasExtras = this.horasTrabajadas - horasNormales;
+                    salario = (horasNormales * this.tarifaPorHora) + 
+                              (horasExtras * this.tarifaPorHora * 1.5);
+                }
+                
+                this.salarioBase = salario; // Actualizamos el salario base para las deducciones
+                return salario;
+            }
+            
+            calcularBeneficios() {
+                let beneficios = 0;
+                
+                // Fondo de ahorro para empleados con más de 1 año
+                if (this.añosEnEmpresa > 1 && this.aceptaFondoAhorro) {
+                    beneficios += this.salarioBase * 0.02;
+                }
+                
+                return beneficios;
+            }
+            
+            getTipoEmpleado() {
+                return "EMPLEADO_POR_HORAS";
+            }
+        }
+
+        class EmpleadoPorComision extends Empleado {
+            constructor(id, nombre, salarioBase, porcentajeComision, ventasRealizadas, añosEnEmpresa) {
+                super(id, nombre, salarioBase, añosEnEmpresa);
+                this.porcentajeComision = porcentajeComision;
+                this.ventasRealizadas = ventasRealizadas;
+                
+                this.validarVentas();
+            }
+            
+            validarVentas() {
+                if (this.ventasRealizadas < 0) {
+                    throw new Error("Las ventas no pueden ser menores a $0");
+                }
+            }
+            
+            calcularSalarioBruto() {
+                const comision = this.ventasRealizadas * (this.porcentajeComision / 100);
+                const bonoVentas = this.calcularBonoVentas();
+                return this.salarioBase + comision + bonoVentas;
+            }
+            
+            calcularBeneficios() {
+                const bonoVentas = this.calcularBonoVentas();
+                return bonoVentas + 1000000; // Bono alimentación
+            }
+            
+            calcularBonoVentas() {
+                if (this.ventasRealizadas > 20000000) {
+                    return this.ventasRealizadas * 0.03; // 3% bono adicional
+                }
+                return 0;
+            }
+            
+            getTipoEmpleado() {
+                return "EMPLEADO_POR_COMISION";
+            }
+        }
+
+        class EmpleadoTemporal extends Empleado {
+            constructor(id, nombre, salarioBase, añosEnEmpresa, duracionContrato) {
+                super(id, nombre, salarioBase, añosEnEmpresa);
+                this.duracionContrato = duracionContrato;
+            }
+            
+            calcularSalarioBruto() {
+                return this.salarioBase;
+            }
+            
+            calcularBeneficios() {
+                return 0; // No aplican bonos ni beneficios adicionales
+            }
+            
+            getTipoEmpleado() {
+                return "EMPLEADO_TEMPORAL";
+            }
+        }
+
+        // Servicio para gestionar empleados (Principio de Inversión de Dependencias)
+        class ServicioEmpleados {
+            constructor() {
+                this.empleados = [];
+                this.cargarDesdeLocalStorage();
+            }
+            
+            agregarEmpleado(empleado) {
+                // Verificar si ya existe un empleado con el mismo ID
+                if (this.empleados.some(emp => emp.id === empleado.id)) {
+                    throw new Error("Ya existe un empleado con este ID");
+                }
+                
+                this.empleados.push(empleado);
+                this.guardarEnLocalStorage();
+                this.actualizarUI();
+            }
+            
+            eliminarEmpleado(id) {
+                this.empleados = this.empleados.filter(emp => emp.id !== id);
+                this.guardarEnLocalStorage();
+                this.actualizarUI();
+            }
+            
+            obtenerEmpleadoPorId(id) {
+                return this.empleados.find(emp => emp.id === id);
+            }
+            
+            obtenerTodosLosEmpleados() {
+                return this.empleados;
+            }
+            
+            guardarEnLocalStorage() {
+                localStorage.setItem('empleados', JSON.stringify(this.empleados));
+            }
+            
+            cargarDesdeLocalStorage() {
+                const empleadosGuardados = localStorage.getItem('empleados');
+                if (empleadosGuardados) {
+                    const datos = JSON.parse(empleadosGuardados);
+                    
+                    // Reconstruir los objetos empleado con sus clases específicas
+                    this.empleados = datos.map(emp => {
+                        switch (emp.tipo) {
+                            case "EMPLEADO_ASALARIADO":
+                                return new EmpleadoAsalariado(emp.id, emp.nombre, emp.salarioBase, emp.añosEnEmpresa);
+                            case "EMPLEADO_POR_HORAS":
+                                return new EmpleadoPorHoras(emp.id, emp.nombre, emp.tarifaPorHora, emp.horasTrabajadas, emp.añosEnEmpresa, emp.aceptaFondoAhorro);
+                            case "EMPLEADO_POR_COMISION":
+                                return new EmpleadoPorComision(emp.id, emp.nombre, emp.salarioBase, emp.porcentajeComision, emp.ventasRealizadas, emp.añosEnEmpresa);
+                            case "EMPLEADO_TEMPORAL":
+                                return new EmpleadoTemporal(emp.id, emp.nombre, emp.salarioBase, emp.añosEnEmpresa, emp.duracionContrato);
+                            default:
+                                return null;
+                        }
+                    }).filter(emp => emp !== null);
+                }
+            }
+            
+            actualizarUI() {
+                this.actualizarListaEmpleados();
+                this.actualizarSelectorEmpleados();
+            }
+            
+            actualizarListaEmpleados() {
+                const employeeList = document.getElementById('employeeList');
+                const employeeCount = document.getElementById('employeeCount');
+                
+                employeeList.innerHTML = '';
+                employeeCount.textContent = `${this.empleados.length} empleados`;
+                
+                if (this.empleados.length === 0) {
+                    employeeList.innerHTML = '<p>No hay empleados registrados</p>';
+                    return;
+                }
+                
+                this.empleados.forEach(emp => {
+                    const employeeItem = document.createElement('div');
+                    employeeItem.className = 'employee-item';
+                    
+                    let tipoTexto = '';
+                    let badgeClass = '';
+                    
+                    switch (emp.getTipoEmpleado()) {
+                        case "EMPLEADO_ASALARIADO":
+                            tipoTexto = "Asalariado";
+                            badgeClass = "badge-primary";
+                            break;
+                        case "EMPLEADO_POR_HORAS":
+                            tipoTexto = "Por Horas";
+                            badgeClass = "badge-success";
+                            break;
+                        case "EMPLEADO_POR_COMISION":
+                            tipoTexto = "Por Comisión";
+                            badgeClass = "badge-warning";
+                            break;
+                        case "EMPLEADO_TEMPORAL":
+                            tipoTexto = "Temporal";
+                            badgeClass = "badge-danger";
+                            break;
+                    }
+                    
+                    employeeItem.innerHTML = `
+                        <div class="employee-info">
+                            <h4>${emp.nombre}</h4>
+                            <p>ID: ${emp.id} | Años en empresa: ${emp.añosEnEmpresa}</p>
+                            <span class="badge ${badgeClass}">${tipoTexto}</span>
+                        </div>
+                        <div class="employee-actions">
+                            <button class="btn btn-danger btn-sm" onclick="servicioEmpleados.eliminarEmpleado('${emp.id}')">Eliminar</button>
+                        </div>
+                    `;
+                    
+                    employeeList.appendChild(employeeItem);
+                });
+            }
+            
+            actualizarSelectorEmpleados() {
+                const selectEmployee = document.getElementById('selectEmployee');
+                
+                // Limpiar opciones excepto la primera
+                while (selectEmployee.options.length > 1) {
+                    selectEmployee.remove(1);
+                }
+                
+                // Agregar empleados al selector
+                this.empleados.forEach(emp => {
+                    const option = document.createElement('option');
+                    option.value = emp.id;
+                    option.textContent = `${emp.nombre} (${emp.id})`;
+                    selectEmployee.appendChild(option);
+                });
+            }
+        }
+
+        // Inicialización del servicio
+        const servicioEmpleados = new ServicioEmpleados();
+
+        // Funciones para la interfaz de usuario
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejo de pestañas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Desactivar todas las pestañas
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Activar la pestaña seleccionada
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // Manejo del cambio de tipo de empleado
+            document.getElementById('employeeType').addEventListener('change', function() {
+                cargarCamposEspecificos(this.value);
+            });
+            
+            // Manejo del formulario de empleado
+            document.getElementById('employeeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                agregarEmpleado();
+            });
+            
+            // Manejo del cálculo de nómina
+            document.getElementById('calculatePayroll').addEventListener('click', function() {
+                calcularNómina();
+            });
+            
+            // Cargar campos específicos iniciales
+            cargarCamposEspecificos(document.getElementById('employeeType').value);
+        });
+
+        function cargarCamposEspecificos(tipo) {
+            const specificFields = document.getElementById('specificFields');
+            let html = '';
+            
+            switch (tipo) {
+                case 'asalariado':
+                    html = `
+                        <div class="form-group">
+                            <label for="salarioFijo">Salario Fijo Mensual</label>
+                            <input type="number" id="salarioFijo" min="0" required>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'horas':
+                    html = `
+                        <div class="form-group">
+                            <label for="tarifaHora">Tarifa por Hora</label>
+                            <input type="number" id="tarifaHora" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="horasTrabajadas">Horas Trabajadas</label>
+                            <input type="number" id="horasTrabajadas" min="0" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="aceptaFondoAhorro">
+                            <label for="aceptaFondoAhorro">Acepta Fondo de Ahorro</label>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'comision':
+                    html = `
+                        <div class="form-group">
+                            <label for="salarioBaseComision">Salario Base</label>
+                            <input type="number" id="salarioBaseComision" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="porcentajeComision">Porcentaje de Comisión (%)</label>
+                            <input type="number" id="porcentajeComision" min="0" max="100" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ventasRealizadas">Ventas Realizadas</label>
+                            <input type="number" id="ventasRealizadas" min="0" required>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'temporal':
+                    html = `
+                        <div class="form-group">
+                            <label for="salarioFijoTemporal">Salario Fijo Mensual</label>
+                            <input type="number" id="salarioFijoTemporal" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="duracionContrato">Duración del Contrato (meses)</label>
+                            <input type="number" id="duracionContrato" min="1" required>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    html = '<p>Seleccione un tipo de empleado para ver los campos específicos</p>';
+            }
+            
+            specificFields.innerHTML = html;
+        }
+
+        function agregarEmpleado() {
+            const tipo = document.getElementById('employeeType').value;
+            const id = document.getElementById('employeeId').value;
+            const nombre = document.getElementById('employeeName').value;
+            const añosEnEmpresa = parseInt(document.getElementById('yearsInCompany').value);
+            
+            try {
+                let empleado;
+                
+                switch (tipo) {
+                    case 'asalariado':
+                        const salarioFijo = parseFloat(document.getElementById('salarioFijo').value);
+                        empleado = new EmpleadoAsalariado(id, nombre, salarioFijo, añosEnEmpresa);
+                        break;
+                        
+                    case 'horas':
+                        const tarifaHora = parseFloat(document.getElementById('tarifaHora').value);
+                        const horasTrabajadas = parseInt(document.getElementById('horasTrabajadas').value);
+                        const aceptaFondoAhorro = document.getElementById('aceptaFondoAhorro').checked;
+                        empleado = new EmpleadoPorHoras(id, nombre, tarifaHora, horasTrabajadas, añosEnEmpresa, aceptaFondoAhorro);
+                        break;
+                        
+                    case 'comision':
+                        const salarioBaseComision = parseFloat(document.getElementById('salarioBaseComision').value);
+                        const porcentajeComision = parseFloat(document.getElementById('porcentajeComision').value);
+                        const ventasRealizadas = parseFloat(document.getElementById('ventasRealizadas').value);
+                        empleado = new EmpleadoPorComision(id, nombre, salarioBaseComision, porcentajeComision, ventasRealizadas, añosEnEmpresa);
+                        break;
+                        
+                    case 'temporal':
+                        const salarioFijoTemporal = parseFloat(document.getElementById('salarioFijoTemporal').value);
+                        const duracionContrato = parseInt(document.getElementById('duracionContrato').value);
+                        empleado = new EmpleadoTemporal(id, nombre, salarioFijoTemporal, añosEnEmpresa, duracionContrato);
+                        break;
+                        
+                    default:
+                        alert('Tipo de empleado no válido');
+                        return;
+                }
+                
+                // Agregar propiedad tipo para facilitar la reconstrucción
+                empleado.tipo = empleado.getTipoEmpleado();
+                
+                servicioEmpleados.agregarEmpleado(empleado);
+                document.getElementById('employeeForm').reset();
+                alert('Empleado agregado correctamente');
+                
+                // Cambiar a la pestaña de lista
+                document.querySelector('.tab[data-tab="list"]').click();
+                
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        function calcularNómina() {
+            const empleadoId = document.getElementById('selectEmployee').value;
+            
+            if (!empleadoId) {
+                alert('Seleccione un empleado');
+                return;
+            }
+            
+            const empleado = servicioEmpleados.obtenerEmpleadoPorId(empleadoId);
+            
+            if (!empleado) {
+                alert('Empleado no encontrado');
+                return;
+            }
+            
+            try {
+                const salarioBruto = empleado.calcularSalarioBruto();
+                const deducciones = empleado.calcularDeducciones();
+                const beneficios = empleado.calcularBeneficios();
+                const salarioNeto = empleado.calcularSalarioNeto();
+                
+                // Formatear números con separadores de miles
+                const formatearMoneda = (valor) => {
+                    return new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                    }).format(valor);
+                };
+                
+                const resultsContent = document.getElementById('resultsContent');
+                resultsContent.innerHTML = `
+                    <div class="result-item">
+                        <span>Salario Bruto:</span>
+                        <span>${formatearMoneda(salarioBruto)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Deducciones (Seguro Social 4%):</span>
+                        <span>${formatearMoneda(deducciones)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Beneficios:</span>
+                        <span>${formatearMoneda(beneficios)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Salario Neto:</span>
+                        <span>${formatearMoneda(salarioNeto)}</span>
+                    </div>
+                `;
+                
+                document.getElementById('payrollResults').style.display = 'block';
+                
+            } catch (error) {
+                alert(`Error al calcular nómina: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
